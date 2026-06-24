@@ -44,6 +44,7 @@ jobs:
         connector_version:
           - '0.10.1'
           - '1.1.1'
+          - '1.2.0'
 
         include:
 
