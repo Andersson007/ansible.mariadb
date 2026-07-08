@@ -15,11 +15,11 @@ import string
 import json
 import re
 
-from ansible_collections.ansible.mysql.plugins.module_utils.mysql import (
+from ansible_collections.ansible.mariadb.plugins.module_utils.mysql import (
     mysql_driver,
     get_server_implementation,
 )
-from ansible_collections.ansible.mysql.plugins.module_utils.implementations.mysql.hash import (
+from ansible_collections.ansible.mariadb.plugins.module_utils.implementations.mysql.hash import (
     mysql_sha256_password_hash,
     mysql_sha256_password_hash_hex,
 )
@@ -394,7 +394,7 @@ def user_mod(cursor, user, host, host_all, password, encrypted,
                 module.fail_json(msg="The server version does not match the requirements "
                                      "for password_expire parameter. See module's documentation.")
             update = False
-            mariadb_role = True if "mariadb" in str(impl.__name__) else False
+            mariadb_role = True if "implementations.mariadb." in str(impl.__name__) else False
             current_password_policy = get_password_expiration_policy(cursor, user, host, maria_role=mariadb_role)
             password_expired = is_password_expired(cursor, user, host)
             # Check if changes needed to be applied.
@@ -1218,8 +1218,8 @@ def attributes_get(cursor, user, host):
 def get_user_implementation(cursor):
     db_engine = get_server_implementation(cursor)
     if db_engine == 'mariadb':
-        from ansible_collections.ansible.mysql.plugins.module_utils.implementations.mariadb import user as mariauser
+        from ansible_collections.ansible.mariadb.plugins.module_utils.implementations.mariadb import user as mariauser
         return mariauser
     else:
-        from ansible_collections.ansible.mysql.plugins.module_utils.implementations.mysql import user as mysqluser
+        from ansible_collections.ansible.mariadb.plugins.module_utils.implementations.mysql import user as mysqluser
         return mysqluser
