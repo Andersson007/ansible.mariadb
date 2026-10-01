@@ -150,6 +150,11 @@
           '{{ mariadb_primary_status.File }}',MASTER_LOG_POS=\
           {{ mariadb_primary_status.Position }},MASTER_SSL=0,MASTER_SSL_CA=''"]
 
+    - name: Assert raw password is not leaked in changeprimary queries
+      ansible.builtin.assert:
+        that:
+          - replication_pass not in result.queries[0]
+
     # Test startreplica mode:
     - name: Start replica
       mariadb_replication:
